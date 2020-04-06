@@ -51,12 +51,12 @@ getthetime(char *buf, size_t len)
 		err(1, "time failed");
 	}
 
-	struct tm *tp = localtime(&tval);
-	if (tp == NULL) {
+	struct tm *timeptr = localtime(&tval);
+	if (timeptr == NULL) {
 		err(1, "time conversion error");
 	}
 
-	strftime(buf, len, timeformat, tp);
+	strftime(buf, len, timeformat, timeptr);
 }
 
 int
