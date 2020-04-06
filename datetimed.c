@@ -103,6 +103,10 @@ main(int argc, char **argv)
 
 	DPRINTF("server up and listening for connections on port %d\n", port);
 
+	if (pledge("stdio inet proc", NULL) == -1) {
+		err(1, "pledge failed");
+	}
+
 	for (;;) {
 		int clientlen = sizeof(&client);
 		int clientsd = accept(sd, (struct sockaddr *)&client, &clientlen);
