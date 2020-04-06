@@ -83,11 +83,16 @@ main(int argc, char **argv)
 		exit(1);
 	}
 
+	/* Restrict the daemon */
+	if (pledge("stdio inet proc", NULL) == -1) {
+		err(1, "pledge failed");
+	}
+
 	int port = PORT;
 	int sd;		/* socket descriptor */
 	struct sockaddr_in sockname, client;
 
-	/* set up the socket */
+	/* Set up the socket */
 	memset(&sockname, 0, sizeof(sockname));
 	sockname.sin_family = AF_INET;
 	sockname.sin_port = htons(port);
@@ -102,10 +107,6 @@ main(int argc, char **argv)
 		err(1, "listen failed");
 
 	DPRINTF("server up and listening for connections on port %d\n", port);
-
-	if (pledge("stdio inet proc", NULL) == -1) {
-		err(1, "pledge failed");
-	}
 
 	for (;;) {
 		int clientlen = sizeof(&client);
