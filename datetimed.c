@@ -30,7 +30,7 @@
 int debug = 0;
 char *timeformat = "%a %b %e %H:%M:%S %Z %Y\n";
 
-#define PORT	17017
+#define PORT	13013
 
 #define DPRINTF(x...) do { if (debug) printf(x); } while (0)
 
