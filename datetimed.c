@@ -62,8 +62,6 @@ getthetime(char *buf, size_t len)
 int
 main(int argc, char **argv)
 {
-	char timestr[1024];
-
 	int c;
 	while ((c = getopt(argc, argv, "d")) != -1) {
 		switch (c) {
@@ -108,6 +106,7 @@ main(int argc, char **argv)
 
 	DPRINTF("server up and listening for connections on port %d\n", port);
 
+	char timestr[1024];
 	for (;;) {
 		int clientlen = sizeof(&client);
 		int clientsd = accept(sd, (struct sockaddr *)&client, &clientlen);
