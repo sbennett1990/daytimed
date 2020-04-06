@@ -28,7 +28,7 @@
 #include <unistd.h>
 
 int debug = 0;
-char *timeformat = "%a %b %e %H:%M:%S %Z %Y";
+char *timeformat = "%a %b %e %H:%M:%S %Z %Y\n";
 
 #define PORT	17017
 
@@ -116,7 +116,7 @@ main(int argc, char **argv)
 		DPRINTF("connection accepted\n");
 
 		getthetime(timestr, sizeof(timestr));
-		printf("%s\n", timestr);
+		printf("%s", timestr);
 		
 		close(clientsd);
 	}
