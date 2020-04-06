@@ -109,6 +109,8 @@ main(int argc, char **argv)
 		if (clientsd == -1)
 			err(1, "accept failed");
 
+		DPRINTF("connection accepted\n");
+
 		getthetime(timestr, sizeof(timestr));
 		printf("%s\n", timestr);
 		
