@@ -30,6 +30,8 @@
 int debug = 0;
 char *timeformat = "%a %b %e %H:%M:%S %Z %Y";
 
+#define PORT	17017
+
 #define DPRINTF(x...) do { if (debug) printf(x); } while (0)
 
 void
@@ -60,10 +62,6 @@ getthetime(char *buf, size_t len)
 int
 main(int argc, char **argv)
 {
-	int port = 17017;
-	struct sockaddr_in sockname, client;
-	int clientlen;
-	int sd;		/* socket descriptor */
 	char timestr[1024];
 
 	int c;
@@ -85,13 +83,17 @@ main(int argc, char **argv)
 		exit(1);
 	}
 
+	int port = PORT;
+	int sd;		/* socket descriptor */
+	struct sockaddr_in sockname, client;
+
 	/* set up the socket */
 	memset(&sockname, 0, sizeof(sockname));
 	sockname.sin_family = AF_INET;
 	sockname.sin_port = htons(port);
 	sockname.sin_addr.s_addr = htonl(INADDR_ANY);
-	sd = socket(AF_INET, SOCK_STREAM, 0);
 
+	sd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sd == -1)
 		err(1, "socket failed");
 	if (bind(sd, (struct sockaddr *)&sockname, sizeof(sockname)) == -1)
@@ -102,9 +104,8 @@ main(int argc, char **argv)
 	DPRINTF("server up and listening for connections on port %d\n", port);
 
 	for (;;) {
-		int clientsd;
-		clientlen = sizeof(&client);
-		clientsd = accept(sd, (struct sockaddr *)&client, &clientlen);
+		int clientlen = sizeof(&client);
+		int clientsd = accept(sd, (struct sockaddr *)&client, &clientlen);
 		if (clientsd == -1)
 			err(1, "accept failed");
 
