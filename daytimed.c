@@ -27,14 +27,14 @@
 #include <time.h>
 #include <unistd.h>
 
-int debug = 0;
-char *timeformat = "%a %b %e %H:%M:%S %Z %Y\n";
+static int debug = 0;
+static const char *timeformat = "%a %b %e %H:%M:%S %Z %Y\n";
 
 #define PORT	13013
 
 #define DPRINTF(x...) do { if (debug) printf(x); } while (0)
 
-void
+static void
 usage()
 {
 	printf("daytimed [-d]\n");
