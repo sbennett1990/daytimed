@@ -151,7 +151,7 @@ main(int argc, char **argv)
 
 	DPRINTF("server up and listening for connections on port %d\n", port);
 
-	char timestr[1024];
+	char timestr[256];
 	for (;;) {
 		int clientlen = sizeof(&client);
 		int clientsd = accept(sd, (struct sockaddr *)&client, &clientlen);
