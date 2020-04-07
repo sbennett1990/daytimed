@@ -37,7 +37,7 @@ char *timeformat = "%a %b %e %H:%M:%S %Z %Y\n";
 void
 usage()
 {
-	printf("datetimed [-d]\n");
+	printf("daytimed [-d]\n");
 }
 
 /*
