@@ -89,7 +89,7 @@ main(int argc, char **argv)
 	}
 
 	/* Sandbox in a chroot and drop priveleges */
-	if (debug != 1) {
+	if (debug == 0) {
 		struct passwd *password;
 		if (!(password = getpwnam(_PW_USER))) {
 			err(1, "getpwnam failed");
@@ -112,7 +112,7 @@ main(int argc, char **argv)
 	}
 
 	/* Run in the background like a real system process */
-	if (debug != 1) {
+	if (debug == 0) {
 		if (daemon(1, 0) == -1) {
 			err(1, "daemon failed");
 		}
