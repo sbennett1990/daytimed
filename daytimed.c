@@ -101,6 +101,26 @@ main(int argc, char **argv)
 		usage();
 	}
 
+	int port = (debug == 1) ? DEBUG_PORT : PORT;
+	int sd;		/* socket descriptor */
+	struct sockaddr_in sockname, client;
+
+	/* Set up the socket */
+	memset(&sockname, 0, sizeof(sockname));
+	sockname.sin_family = AF_INET;
+	sockname.sin_port = htons(port);
+	sockname.sin_addr.s_addr = (debug == 1) ? htonl(DEBUG_ADDR) : htonl(ADDR);
+
+	sd = socket(AF_INET, SOCK_STREAM, 0);
+	if (sd == -1)
+		err(1, "socket failed");
+	if (bind(sd, (struct sockaddr *)&sockname, sizeof(sockname)) == -1)
+		err(1, "bind failed");
+	if (listen(sd, 3) == -1)
+		err(1, "listen failed");
+
+	DPRINTF("server up and listening for connections on port %d\n", port);
+
 	/* Sandbox in a chroot and drop priveleges */
 	if (debug == 0) {
 		struct passwd *password;
@@ -131,26 +151,6 @@ main(int argc, char **argv)
 			err(1, "daemon failed");
 		}
 	}
-
-	int port = (debug == 1) ? DEBUG_PORT : PORT;
-	int sd;		/* socket descriptor */
-	struct sockaddr_in sockname, client;
-
-	/* Set up the socket */
-	memset(&sockname, 0, sizeof(sockname));
-	sockname.sin_family = AF_INET;
-	sockname.sin_port = htons(port);
-	sockname.sin_addr.s_addr = (debug == 1) ? htonl(DEBUG_ADDR) : htonl(ADDR);
-
-	sd = socket(AF_INET, SOCK_STREAM, 0);
-	if (sd == -1)
-		err(1, "socket failed");
-	if (bind(sd, (struct sockaddr *)&sockname, sizeof(sockname)) == -1)
-		err(1, "bind failed");
-	if (listen(sd, 3) == -1)
-		err(1, "listen failed");
-
-	DPRINTF("server up and listening for connections on port %d\n", port);
 
 	char timestr[256];
 	for (;;) {
