@@ -35,6 +35,8 @@
 static int debug = 0;
 static const char *timeformat = "%a %b %e %H:%M:%S %Z %Y\n";
 
+#define ADDR		INADDR_ANY
+#define DEBUG_ADDR	INADDR_LOOPBACK
 #define PORT		13013
 #define _PW_USER	"_identd"
 #define _PW_DIR		"/var/empty"
@@ -126,7 +128,7 @@ main(int argc, char **argv)
 	memset(&sockname, 0, sizeof(sockname));
 	sockname.sin_family = AF_INET;
 	sockname.sin_port = htons(port);
-	sockname.sin_addr.s_addr = htonl(INADDR_ANY);
+	sockname.sin_addr.s_addr = (debug == 1) ? htonl(DEBUG_ADDR) : htonl(ADDR);
 
 	sd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sd == -1)
