@@ -73,7 +73,10 @@ getthetime(char *buf, const size_t maxlen)
 		err(1, "time conversion error");
 	}
 
-	strftime(buf, len, timeformat, timeptr);
+	size_t count = strftime(buf, maxlen, timeformat, timeptr);
+	if (count == 0) {
+		err(1, "couldn't write time string to buffer");
+	}
 }
 
 int
