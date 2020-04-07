@@ -144,7 +144,7 @@ main(int argc, char **argv)
 
 	int port = (debug == 1) ? DEBUG_PORT : PORT;
 	int sd;		/* socket descriptor */
-	struct sockaddr_in sockname, client;
+	struct sockaddr_in sockname;
 
 	/* Set up the socket */
 	memset(&sockname, 0, sizeof(sockname));
@@ -164,10 +164,11 @@ main(int argc, char **argv)
 
 	privdrop();
 
+	struct sockaddr_in clientsock;
 	char timestr[256];
 	for (;;) {
-		int clientlen = sizeof(&client);
-		int clientsd = accept(sd, (struct sockaddr *)&client, &clientlen);
+		int clientsocklen = sizeof(&clientsock);
+		int clientsd = accept(sd, (struct sockaddr *)&clientsock, &clientsocklen);
 		if (clientsd == -1)
 			err(1, "accept failed");
 		DPRINTF("connection accepted\n");
