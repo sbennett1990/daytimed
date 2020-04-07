@@ -140,10 +140,12 @@ main(int argc, char **argv)
 		}
 	}
 
-	/* Restrict the daemon */
+	/* Restrict the server */
 	if (pledge("stdio inet proc", NULL) == -1) {
 		err(1, "pledge failed");
 	}
+
+	DPRINTF("server is sandboxed\n");
 
 	/* Run in the background like a real system process */
 	if (debug == 0) {
