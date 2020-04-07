@@ -38,6 +38,7 @@ void
 usage()
 {
 	printf("daytimed [-d]\n");
+	exit(1);
 }
 
 /*
@@ -76,9 +77,8 @@ main(int argc, char **argv)
 	argc -= optind;
 	argv += optind;
 
-	if (argc > 1) {
+	if (argc > 0) {
 		usage();
-		exit(1);
 	}
 
 	/* Restrict the daemon */
