@@ -14,6 +14,10 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+/*
+ * Implements a basic daytime daemon - RFC 867
+ */
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -21,6 +25,7 @@
 #include <err.h>
 #include <errno.h>
 #include <limits.h>
+#include <pwd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -30,7 +35,9 @@
 static int debug = 0;
 static const char *timeformat = "%a %b %e %H:%M:%S %Z %Y\n";
 
-#define PORT	13013
+#define PORT		13013
+#define _PW_USER	"_identd"
+#define _PW_DIR		"/var/empty"
 
 #define DPRINTF(x...) do { if (debug) printf(x); } while (0)
 
@@ -79,6 +86,24 @@ main(int argc, char **argv)
 
 	if (argc > 0) {
 		usage();
+	}
+
+	/* Sandbox in a chroot and drop priveleges */
+	if (debug != 1) {
+		struct passwd *password;
+		if (!(password = getpwnam(_PW_USER))) {
+			err(1, "getpwnam failed");
+		}
+		if (chroot(_PW_DIR) == -1) {
+			err(1, "chroot failed");
+		}
+		if (chdir("/") == -1) {
+			err(1, "chdir failed");
+		}
+		if (setresgid(password->pw_gid, password->pw_gid, password->pw_gid) == -1 ||
+		    setresuid(password->pw_uid, password->pw_uid, password->pw_uid) == -1) {
+			err(1, "privdrop failed");
+		}
 	}
 
 	/* Restrict the daemon */
