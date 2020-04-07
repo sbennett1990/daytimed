@@ -86,6 +86,13 @@ main(int argc, char **argv)
 		err(1, "pledge failed");
 	}
 
+	/* Run in the background like a real system process */
+	if (debug != 1) {
+		if (daemon(1, 0) == -1) {
+			err(1, "daemon failed");
+		}
+	}
+
 	int port = PORT;
 	int sd;		/* socket descriptor */
 	struct sockaddr_in sockname, client;
@@ -112,7 +119,6 @@ main(int argc, char **argv)
 		int clientsd = accept(sd, (struct sockaddr *)&client, &clientlen);
 		if (clientsd == -1)
 			err(1, "accept failed");
-
 		DPRINTF("connection accepted\n");
 
 		getthetime(timestr, sizeof(timestr));
