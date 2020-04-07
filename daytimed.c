@@ -45,7 +45,7 @@ static const char *timeformat = "%a %b %e %H:%M:%S %Z %Y\n";
 #define DPRINTF(x...) do { if (debug) printf(x); } while (0)
 
 static void
-usage()
+usage(void)
 {
 	printf("daytimed [-d]\n");
 	exit(1);
