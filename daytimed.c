@@ -54,8 +54,15 @@ usage()
  * Get the current date and time and write a human-readable string to buf.
  */
 void
-getthetime(char *buf, size_t len)
+getthetime(char *buf, const size_t maxlen)
 {
+	if (buf == NULL) {
+		err(1, "getthetime: buf is null");
+	}
+	if (maxlen < 2) {
+		err(1, "getthetime: maxlen is too short");
+	}
+
 	time_t tval;
 	if (time(&tval) == -1) {
 		err(1, "time failed");
