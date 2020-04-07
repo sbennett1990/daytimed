@@ -116,8 +116,14 @@ main(int argc, char **argv)
 		DPRINTF("connection accepted\n");
 
 		getthetime(timestr, sizeof(timestr));
-		printf("%s", timestr);
-		
+		size_t tslen = strnlen(timestr, sizeof(timestr));
+
+		ssize_t nsent = send(clientsd, timestr, tslen, 0);
+		if (nsent == -1) {
+			err(1, "send failed");
+		}
+		DPRINTF("sent %zd chars\n", nsent);
+
 		close(clientsd);
 	}
 }
