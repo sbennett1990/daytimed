@@ -80,6 +80,47 @@ getthetime(char *buf, const size_t maxlen)
 	}
 }
 
+/*
+ * Chroot, revoke priveleges, and pledge(2) the server.
+ * This should be called even in debug mode.
+ */
+static void
+privdrop(void)
+{
+	/* Sandbox in a chroot and drop priveleges */
+	if (debug == 0) {
+		struct passwd *password;
+		if (!(password = getpwnam(_PW_USER))) {
+			err(1, "getpwnam failed");
+		}
+		if (chroot(_PW_DIR) == -1) {
+			err(1, "chroot failed");
+		}
+		if (chdir("/") == -1) {
+			err(1, "chdir failed");
+		}
+		if (setgroups(1, &password->pw_gid) == -1 ||
+		    setresgid(password->pw_gid, password->pw_gid, password->pw_gid) == -1 ||
+		    setresuid(password->pw_uid, password->pw_uid, password->pw_uid) == -1) {
+			err(1, "privdrop failed");
+		}
+	}
+
+	/* Restrict the server */
+	if (pledge("stdio inet proc", NULL) == -1) {
+		err(1, "pledge failed");
+	}
+
+	DPRINTF("server is sandboxed\n");
+
+	/* Run in the background like a real system process */
+	if (debug == 0) {
+		if (daemon(1, 0) == -1) {
+			err(1, "daemon failed");
+		}
+	}
+}
+
 int
 main(int argc, char **argv)
 {
@@ -121,38 +162,7 @@ main(int argc, char **argv)
 
 	DPRINTF("server up and listening for connections on port %d\n", port);
 
-	/* Sandbox in a chroot and drop priveleges */
-	if (debug == 0) {
-		struct passwd *password;
-		if (!(password = getpwnam(_PW_USER))) {
-			err(1, "getpwnam failed");
-		}
-		if (chroot(_PW_DIR) == -1) {
-			err(1, "chroot failed");
-		}
-		if (chdir("/") == -1) {
-			err(1, "chdir failed");
-		}
-		if (setgroups(1, &password->pw_gid) == -1 ||
-		    setresgid(password->pw_gid, password->pw_gid, password->pw_gid) == -1 ||
-		    setresuid(password->pw_uid, password->pw_uid, password->pw_uid) == -1) {
-			err(1, "privdrop failed");
-		}
-	}
-
-	/* Restrict the server */
-	if (pledge("stdio inet proc", NULL) == -1) {
-		err(1, "pledge failed");
-	}
-
-	DPRINTF("server is sandboxed\n");
-
-	/* Run in the background like a real system process */
-	if (debug == 0) {
-		if (daemon(1, 0) == -1) {
-			err(1, "daemon failed");
-		}
-	}
+	privdrop();
 
 	char timestr[256];
 	for (;;) {
