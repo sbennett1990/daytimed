@@ -37,7 +37,8 @@ static const char *timeformat = "%a %b %e %H:%M:%S %Z %Y\n";
 
 #define ADDR		INADDR_ANY
 #define DEBUG_ADDR	INADDR_LOOPBACK
-#define PORT		13013
+#define PORT		13
+#define DEBUG_PORT	13013
 #define _PW_USER	"_identd"
 #define _PW_DIR		"/var/empty"
 
@@ -131,7 +132,7 @@ main(int argc, char **argv)
 		}
 	}
 
-	int port = PORT;
+	int port = (debug == 1) ? DEBUG_PORT : PORT;
 	int sd;		/* socket descriptor */
 	struct sockaddr_in sockname, client;
 
