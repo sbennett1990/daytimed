@@ -169,8 +169,9 @@ main(int argc, char **argv)
 	for (;;) {
 		int clientsocklen = sizeof(&clientsock);
 		int clientsd = accept(sd, (struct sockaddr *)&clientsock, &clientsocklen);
-		if (clientsd == -1)
+		if (clientsd == -1) {
 			err(1, "accept failed");
+		}
 		DPRINTF("connection accepted\n");
 
 		getthetime(timestr, sizeof(timestr));
