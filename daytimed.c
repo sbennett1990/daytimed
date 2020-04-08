@@ -20,12 +20,14 @@
 
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/wait.h>
 #include <netinet/in.h>
 
 #include <err.h>
 #include <errno.h>
 #include <limits.h>
 #include <pwd.h>
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -49,6 +51,15 @@ usage(void)
 {
 	printf("daytimed [-d]\n");
 	exit(1);
+}
+
+/*
+ * Handler for SIGCHLD
+ */
+static void
+kidhandler(int signum)
+{
+	waitpid(WAIT_ANY, NULL, WNOHANG);
 }
 
 /*
@@ -164,6 +175,14 @@ main(int argc, char **argv)
 
 	privdrop();
 
+	struct sigaction sa;
+	sa.sa_handler = kidhandler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART;
+	if (sigaction(SIGCHLD, &sa, NULL) == -1) {
+		err(1, "sigaction failed");
+	}
+
 	struct sockaddr_in clientsock;
 	char timestr[256];
 	for (;;) {
@@ -174,14 +193,24 @@ main(int argc, char **argv)
 		}
 		DPRINTF("connection accepted\n");
 
-		getthetime(timestr, sizeof(timestr));
-		size_t tslen = strnlen(timestr, sizeof(timestr));
-
-		ssize_t nsent = send(clientsd, timestr, tslen, 0);
-		if (nsent == -1) {
-			err(1, "send failed");
+		int pid = fork();
+		if (pid == -1) {
+			err(1, "fork failed");
 		}
-		DPRINTF("sent %zd chars\n", nsent);
+		if (pid == 0) {
+			getthetime(timestr, sizeof(timestr));
+			size_t tslen = strnlen(timestr, sizeof(timestr));
+
+			ssize_t nsent = send(clientsd, timestr, tslen, 0);
+			if (nsent == -1) {
+				err(1, "send failed");
+			}
+			DPRINTF("sent %zd chars\n", nsent);
+
+			close(clientsd);
+			DPRINTF("closed client connection from child - exiting child\n");
+			exit(0);
+		}
 
 		close(clientsd);
 	}
