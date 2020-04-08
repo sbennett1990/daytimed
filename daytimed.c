@@ -210,6 +210,10 @@ main(int argc, char **argv)
 		case 0:
 			/* child */
 			DPRINTF("child is processing\n");
+			/* Restrict the child */
+			if (pledge("stdio", NULL) == -1) {
+				err(1, "child pledge failed");
+			}
 			getthetime(timestr, sizeof(timestr));
 			size_t tslen = strnlen(timestr, sizeof(timestr));
 
