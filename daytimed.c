@@ -175,7 +175,7 @@ main(int argc, char **argv)
 		err(1, "socket failed");
 	if (bind(listensd, (struct sockaddr *)&serversock, sizeof(serversock)) == -1)
 		err(1, "bind failed");
-	if (listen(listensd, 3) == -1)
+	if (listen(listensd, 5) == -1)
 		err(1, "listen failed");
 
 	DPRINTF("server up and listening for connections on port %d\n", port);
