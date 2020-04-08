@@ -161,7 +161,6 @@ main(int argc, char **argv)
 	}
 
 	int port = (debug == 1) ? DEBUG_PORT : PORT;
-	int sd;		/* socket descriptor */
 	struct sockaddr_in serversock;
 
 	/* Set up the server socket */
@@ -170,12 +169,13 @@ main(int argc, char **argv)
 	serversock.sin_port = htons(port);
 	serversock.sin_addr.s_addr = (debug == 1) ? htonl(DEBUG_ADDR) : htonl(ADDR);
 
-	sd = socket(AF_INET, SOCK_STREAM, 0);
-	if (sd == -1)
+	int listensd;		/* listening socket descriptor */
+	listensd = socket(AF_INET, SOCK_STREAM, 0);
+	if (listensd == -1)
 		err(1, "socket failed");
-	if (bind(sd, (struct sockaddr *)&serversock, sizeof(serversock)) == -1)
+	if (bind(listensd, (struct sockaddr *)&serversock, sizeof(serversock)) == -1)
 		err(1, "bind failed");
-	if (listen(sd, 3) == -1)
+	if (listen(listensd, 3) == -1)
 		err(1, "listen failed");
 
 	DPRINTF("server up and listening for connections on port %d\n", port);
@@ -194,7 +194,7 @@ main(int argc, char **argv)
 	char timestr[256];
 	for (;;) {
 		int clientsocklen = sizeof(&clientsock);
-		int clientsd = accept(sd, (struct sockaddr *)&clientsock, &clientsocklen);
+		int clientsd = accept(listensd, (struct sockaddr *)&clientsock, &clientsocklen);
 		if (clientsd == -1) {
 			err(1, "accept failed");
 		}
