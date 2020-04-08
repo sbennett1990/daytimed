@@ -162,18 +162,18 @@ main(int argc, char **argv)
 
 	int port = (debug == 1) ? DEBUG_PORT : PORT;
 	int sd;		/* socket descriptor */
-	struct sockaddr_in sockname;
+	struct sockaddr_in serversock;
 
-	/* Set up the socket */
-	memset(&sockname, 0, sizeof(sockname));
-	sockname.sin_family = AF_INET;
-	sockname.sin_port = htons(port);
-	sockname.sin_addr.s_addr = (debug == 1) ? htonl(DEBUG_ADDR) : htonl(ADDR);
+	/* Set up the server socket */
+	memset(&serversock, 0, sizeof(serversock));
+	serversock.sin_family = AF_INET;
+	serversock.sin_port = htons(port);
+	serversock.sin_addr.s_addr = (debug == 1) ? htonl(DEBUG_ADDR) : htonl(ADDR);
 
 	sd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sd == -1)
 		err(1, "socket failed");
-	if (bind(sd, (struct sockaddr *)&sockname, sizeof(sockname)) == -1)
+	if (bind(sd, (struct sockaddr *)&serversock, sizeof(serversock)) == -1)
 		err(1, "bind failed");
 	if (listen(sd, 3) == -1)
 		err(1, "listen failed");
