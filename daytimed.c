@@ -182,14 +182,17 @@ main(int argc, char **argv)
 
 	privdrop();
 
+	/* Ensure children can be made without leaving zombies when they die */
 	struct sigaction sa;
 	sa.sa_handler = kidhandler;
 	sigemptyset(&sa.sa_mask);
+	/* Allow syscalls (like accept(2)) to be restarted if they're interrupted by a SIGCHLD */
 	sa.sa_flags = SA_RESTART;
 	if (sigaction(SIGCHLD, &sa, NULL) == -1) {
 		err(1, "sigaction failed");
 	}
 
+	/* Accept client connections and serve the current time */
 	struct sockaddr_in clientsock;
 	char timestr[256];
 	for (;;) {
