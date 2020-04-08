@@ -138,12 +138,12 @@ main(int argc, char **argv)
 	int c;
 	while ((c = getopt(argc, argv, "d")) != -1) {
 		switch (c) {
-			case 'd':
-				debug = 1;
-				break;
-			default:
-				usage();
-				break;
+		case 'd':
+			debug = 1;
+			break;
+		default:
+			usage();
+			break;
 		}
 	}
 	argc -= optind;
