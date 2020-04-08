@@ -16,5 +16,10 @@ The options are as follows:
 In debug mode (**-d**), root privileges are not required and the server will listen on *localhost*
 port *13013*.
 
+# CAVEATS
+**daytimed** only builds and works on OpenBSD 6.6 or newer, because it relies on pledge(2)
+and the built-in make infrastructure. Portability could be achieved with minimal effort, but that
+is outside the scope of my current goals.
+
 # AUTHORS
 Scott Bennett
