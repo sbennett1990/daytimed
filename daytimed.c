@@ -69,10 +69,10 @@ void
 getthetime(char *buf, const size_t maxlen)
 {
 	if (buf == NULL) {
-		err(1, "getthetime: buf is null");
+		errx(1, "getthetime: buf is null");
 	}
 	if (maxlen < 2) {
-		err(1, "getthetime: maxlen is too short");
+		errx(1, "getthetime: maxlen is too short");
 	}
 
 	time_t tval;
