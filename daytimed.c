@@ -200,11 +200,12 @@ main(int argc, char **argv)
 		}
 		DPRINTF("connection accepted\n");
 
-		int pid = fork();
-		if (pid == -1) {
+		int pid;
+		switch ((pid = fork())) {
+		case -1:
 			err(1, "fork failed");
-		}
-		if (pid == 0) {
+		case 0:
+			/* child */
 			DPRINTF("child is processing\n");
 			getthetime(timestr, sizeof(timestr));
 			size_t tslen = strnlen(timestr, sizeof(timestr));
@@ -218,9 +219,10 @@ main(int argc, char **argv)
 			close(clientsd);
 			DPRINTF("child - closed client connection sd %d - exiting child\n", clientsd);
 			exit(0);
+		default:
+			/* parent */
+			DPRINTF("parent - closed client connection sd %d\n", clientsd);
+			close(clientsd);
 		}
-
-		DPRINTF("parent - closed client connection sd %d\n", clientsd);
-		close(clientsd);
 	}
 }
