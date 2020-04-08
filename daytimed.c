@@ -221,8 +221,8 @@ main(int argc, char **argv)
 			exit(0);
 		default:
 			/* parent */
-			DPRINTF("parent - closed client connection sd %d\n", clientsd);
 			close(clientsd);
+			DPRINTF("parent - closed client connection sd %d\n", clientsd);
 		}
 	}
 }
