@@ -15,7 +15,7 @@
  */
 
 /*
- * Implements a basic daytime daemon - RFC 867
+ * Basic daytime daemon - RFC 867
  */
 
 #include <sys/types.h>
