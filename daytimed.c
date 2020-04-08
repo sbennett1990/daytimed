@@ -200,7 +200,7 @@ main(int argc, char **argv)
 		}
 		DPRINTF("connection accepted\n");
 
-		int pid;
+		pid_t pid;
 		switch ((pid = fork())) {
 		case -1:
 			err(1, "fork failed");
