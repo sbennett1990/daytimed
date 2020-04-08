@@ -161,9 +161,9 @@ main(int argc, char **argv)
 	}
 
 	int port = (debug == 1) ? DEBUG_PORT : PORT;
-	struct sockaddr_in serversock;
 
 	/* Set up the server socket */
+	struct sockaddr_in serversock;
 	memset(&serversock, 0, sizeof(serversock));
 	serversock.sin_family = AF_INET;
 	serversock.sin_port = htons(port);
