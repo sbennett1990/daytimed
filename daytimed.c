@@ -153,6 +153,13 @@ main(int argc, char **argv)
 		usage();
 	}
 
+	if (debug == 0) {
+		/* Need to be root to bind to low port */
+		if (geteuid() != 0) {
+			errx(1, "need root privileges");
+		}
+	}
+
 	int port = (debug == 1) ? DEBUG_PORT : PORT;
 	int sd;		/* socket descriptor */
 	struct sockaddr_in sockname;
