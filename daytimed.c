@@ -193,8 +193,8 @@ main(int argc, char **argv)
 	}
 
 	/* Accept client connections and serve the current time */
-	struct sockaddr_in clientsock;
 	char timestr[256];		/* holds the time string sent to the client */
+	struct sockaddr_in clientsock;
 	for (;;) {
 		int clientsocklen = sizeof(&clientsock);
 		int clientsd = accept(listensd, (struct sockaddr *)&clientsock, &clientsocklen);
