@@ -41,7 +41,7 @@ static const char *timeformat = "%a %b %e %H:%M:%S %Z %Y\n";
 #define DEBUG_ADDR	INADDR_LOOPBACK
 #define PORT		13
 #define DEBUG_PORT	13013
-#define _PW_USER	"_identd"
+#define _PW_USER	"_daytimed"
 #define _PW_DIR		"/var/empty"
 
 #define DPRINTF(x...) do { if (debug) printf(x); } while (0)
