@@ -171,8 +171,9 @@ main(int argc, char **argv)
 
 	int listensd;		/* listening socket descriptor */
 	listensd = socket(AF_INET, SOCK_STREAM, 0);
-	if (listensd == -1)
+	if (listensd == -1) {
 		err(1, "socket failed");
+	}
 	if (bind(listensd, (struct sockaddr *)&serversock, sizeof(serversock)) == -1)
 		err(1, "bind failed");
 	if (listen(listensd, 5) == -1)
