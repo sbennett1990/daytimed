@@ -65,7 +65,7 @@ kidhandler(int signum)
 /*
  * Get the current date and time and write a human-readable string to buf.
  */
-void
+static void
 getthetime(char *buf, const size_t maxlen)
 {
 	if (buf == NULL) {
