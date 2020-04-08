@@ -92,13 +92,13 @@ getthetime(char *buf, const size_t maxlen)
 }
 
 /*
- * Chroot, revoke priveleges, and pledge(2) the server.
+ * Chroot, revoke privileges, and pledge(2) the server.
  * This should be called even in debug mode.
  */
 static void
 privdrop(void)
 {
-	/* Sandbox in a chroot and drop priveleges */
+	/* Sandbox in a chroot and drop privileges */
 	if (debug == 0) {
 		struct passwd *password;
 		if (!(password = getpwnam(_PW_USER))) {
