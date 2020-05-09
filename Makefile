@@ -10,4 +10,7 @@ CFLAGS+= -Wmissing-declarations
 CFLAGS+= -Wshadow -Wpointer-arith -Wcast-qual
 CFLAGS+= -Wsign-compare
 
+md:
+	mandoc -Tmarkdown ${MAN} > ${PROG}.md
+
 .include <bsd.prog.mk>
