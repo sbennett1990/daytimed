@@ -2,7 +2,7 @@
 PROG=	daytimed
 SRCS=	daytimed.c
 
-NOMAN=	noman
+MAN=	daytimed.8
 
 CFLAGS+= -Wall
 CFLAGS+= -Wstrict-prototypes -Wmissing-prototypes
