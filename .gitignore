@@ -1,0 +1,4 @@
+daytimed
+*.d
+*.o
+*.tgz
