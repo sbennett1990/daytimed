@@ -49,4 +49,4 @@ and the built-in make infrastructure.
 Portability could be achieved with minimal effort, but that is outside the scope of my
 current goals.
 
-OpenBSD 6.5 - May 9, 2020
+OpenBSD 6.7 - May 9, 2020
