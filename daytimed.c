@@ -195,7 +195,7 @@ main(int argc, char **argv)
 	}
 
 	/* Accept client connections and serve the current time */
-	char timestr[256];		/* holds the time string sent to the client */
+	char timestr[64];	/* holds the time string sent to the client */
 	struct sockaddr_in clientsock;
 	for (;;) {
 		socklen_t clientsocklen = sizeof(&clientsock);
@@ -209,8 +209,7 @@ main(int argc, char **argv)
 		switch ((pid = fork())) {
 		case -1:
 			err(1, "fork failed");
-		case 0:
-			/* child */
+		case 0: /* child */
 			DPRINTF("child is processing\n");
 			/* Restrict the child */
 			if (pledge("stdio", NULL) == -1) {
@@ -228,8 +227,7 @@ main(int argc, char **argv)
 			close(clientsd);
 			DPRINTF("child - closed client connection sd %d - exiting child\n", clientsd);
 			exit(0);
-		default:
-			/* parent */
+		default: /* parent */
 			close(clientsd);
 			DPRINTF("parent - closed client connection sd %d\n", clientsd);
 		}
