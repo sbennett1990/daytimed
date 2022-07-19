@@ -109,9 +109,9 @@ privdrop(void)
 		if (chdir("/") == -1) {
 			err(1, "chdir failed");
 		}
-		if (setgroups(1, &password->pw_gid) == -1 ||
-		    setresgid(password->pw_gid, password->pw_gid, password->pw_gid) == -1 ||
-		    setresuid(password->pw_uid, password->pw_uid, password->pw_uid) == -1) {
+		if (setgroups(1, &password->pw_gid) ||
+		    setresgid(password->pw_gid, password->pw_gid, password->pw_gid) ||
+		    setresuid(password->pw_uid, password->pw_uid, password->pw_uid)) {
 			err(1, "privdrop failed");
 		}
 	}
