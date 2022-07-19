@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Scott Bennett <scottb@fastmail.com>
+ * Copyright (c) 2020,2022 Scott Bennett <scottb@fastmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
