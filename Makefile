@@ -1,4 +1,3 @@
-
 PROG=	daytimed
 SRCS=	daytimed.c
 
@@ -13,5 +12,12 @@ CFLAGS+= -Wsign-compare
 
 md:
 	mandoc -Tmarkdown ${MAN} > ${README}
+
+user:
+	doas user add -c"daytime daemon" \
+            -d/var/empty \
+            -p* \
+            -s/sbin/nologin \
+            _daytimed
 
 .include <bsd.prog.mk>
